@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+<servlet>
+	<servlet-name>ControllerUsing</servlet-name>
+	<servlet-class>mvc.controller.ControllerUsingFile</servlet-class>
+	<init-param>
+		<param-name>configFile</param-name>
+		<param-value>/WEB-INF/commandHandler.properties</param-value>
+	</init-param>
+	<load-on-startup>1</load-on-startup>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>ControllerUsing</servlet-name>
+	<url-pattern>/controllerUsingFile</url-pattern>
+</servlet-mapping>
+
+
+
+<servlet>
+	<servlet-name>SimpleController</servlet-name>
+	<servlet-class>mvc.simple.SimpleController</servlet-class>
+  </servlet>
+
+	<servlet-mapping>
+		<servlet-name>SimpleController</servlet-name>
+		<url-pattern>/simple</url-pattern>
+	</servlet-mapping>
+</web-app>
