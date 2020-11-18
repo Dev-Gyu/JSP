@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+<listener>
+	<listener-class>jdbc.DBCPInitListener</listener-class>
+</listener>
+
+<context-param>
+	<param-name>poolConfig</param-name>
+	<param-value>
+	jdbcdriver=com.mysql.cj.jdbc.Driver
+	jdbcUrl=jdbc:mysql://localhost:3306/guestbook?serverTimezome=UTC&amp;characterEncoding=utf8
+	dbUser=jspexam
+	dbpw=jsppw
+	poolName=guestbook
+	</param-value>
+</context-param>
+</web-app>
