@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" id="WebApp_ID" version="4.0">
+<servlet>
+	<servlet-name>controller</servlet-name>
+	<servlet-class>mvc.controller.ControllerClass</servlet-class>
+	<init-param>
+		<param-name>initProperties</param-name>
+		<param-value>/WEB-INF/property/initProperty.properties</param-value>
+	</init-param>
+	<init-param>
+		<param-name>cmd</param-name>
+		<param-value>select</param-value>
+	</init-param>
+	<load-on-startup>1</load-on-startup>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>controller</servlet-name>
+	<url-pattern>/view</url-pattern>
+</servlet-mapping>
+
+
 <listener>
 	<listener-class>mvc.dbcp.DBCPInit</listener-class>
 </listener>
@@ -14,7 +34,6 @@ jdbcUrl=jdbc:mysql://localhost:3306/study?serverTimezone=UTC&amp;useUnicode=true
 dbcpDriver=org.apache.commons.dbcp2.PoolingDriver
 dbcpUrl=jdbc:apache:commons:dbcp:
 dbName=study
-
-	</param-value>
+</param-value>
 </context-param>
 </web-app>

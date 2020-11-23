@@ -18,6 +18,7 @@
 <body>
 <h2>메시지 입력</h2>
 <form method="POST" action="insert.jsp">
+<input type="hidden" name="cmd" value="insert"/>
 <table border="1" width="40%">
 	<tr>
 	<td width="20%" align="center">이름:</td><td><input type="text" name="name" size="20"></td>
