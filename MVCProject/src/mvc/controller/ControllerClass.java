@@ -13,60 +13,72 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import mvc.handler.CommandHandler;
+import mvc.handler.HandlerInterface;
 
 public class ControllerClass extends HttpServlet{
 	
-	private Map<String, CommandHandler> CommandHandlerMap = new HashMap<>();
+	private Map<String, HandlerInterface> commandHandlerMap = new HashMap<>();
+	
 	@Override
-	public void init() throws ServletException {
-		String initProperties = getInitParameter("initProperties");
+	public void init() throws ServletException{
+		String commandProperties = getInitParameter("commandProperties");
 		Properties prop = new Properties();
-		String initPropertiesPath = getServletContext().getRealPath(initProperties);
-		try(FileInputStream fis =  new FileInputStream(initPropertiesPath)) {
+		String propertiesPath = getServletContext().getRealPath(commandProperties);
+		try(FileInputStream fis = new FileInputStream(propertiesPath)){
 			prop.load(fis);
-		}catch(IOException e) {
-			throw new ServletException(e);
+		}catch(Exception e) {
+			throw new ServletException(e.getMessage() + "init() method실행 중 에러발생", e);
 		}
 		Iterator iter = prop.keySet().iterator();
 		while(iter.hasNext()) {
-			String command = (String)iter.next();
-			String commandClass = prop.getProperty(command);
+			String command = (String) iter.next();
+			String path = (String)prop.get(command);
 			try {
-				Class<?> instance = Class.forName(commandClass);
-				CommandHandler handler = (CommandHandler) instance.newInstance();
-				CommandHandlerMap.put(command, handler);
-			}catch(ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-				throw new ServletException(e.getMessage(), e);
+				Class<?> instance = Class.forName(path);
+				HandlerInterface commandHandler = (HandlerInterface) instance.newInstance();
+				commandHandlerMap.put(command, commandHandler);
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}
 	
 	@Override
-	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+	public void doGet(HttpServletRequest request, HttpServletResponse response) {
 		process(request, response);
 	}
 	
 	@Override
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+	public void doPost(HttpServletRequest request, HttpServletResponse response) {
 		process(request, response);
 	}
 	
-	public void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		String command = request.getParameter("cmd");
-		if(command == null) {
+	private void process(HttpServletRequest request, HttpServletResponse response) {
+		String command = null;
+		if(request.getParameter("cmd") == null) {
 			command = "select";
+		}else {
+			command = request.getParameter("cmd");
 		}
-		CommandHandler handler = CommandHandlerMap.get(command);
-		String viewPagePath = null;
-		System.out.println(command);
-		try {
-		viewPagePath = handler.process(request, response);
-		}catch(Exception e) {
-			throw new ServletException(e);
-		}
-		RequestDispatcher dispatcher = request.getRequestDispatcher(viewPagePath);
-		dispatcher.forward(request, response);
+			HandlerInterface handler = commandHandlerMap.get(command);
+			String viewPage = handler.process(request, response);
+			RequestDispatcher dispatcher = request.getRequestDispatcher(viewPage);
+			try {
+				dispatcher.forward(request, response);
+			} catch (ServletException e) {
+				// TODO Auto-generated catch block
+				throw new RuntimeException(e.getMessage(),e);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				throw new RuntimeException(e.getMessage(),e);
+			}
 	}
 
 }

@@ -27,6 +27,7 @@ public class getRecordService {
 	public List<VOClass> getAllRecords() throws SQLException, IOException{
 		try {
 			conn = ConnectionClass.getConnection();
+			dao.primaryKeyReset(conn);
 			return dao.getAllRecordsDAO(conn);
 		}finally {
 			CloseClass.close(conn);

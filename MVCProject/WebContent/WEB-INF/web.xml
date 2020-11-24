@@ -4,12 +4,8 @@
 	<servlet-name>controller</servlet-name>
 	<servlet-class>mvc.controller.ControllerClass</servlet-class>
 	<init-param>
-		<param-name>initProperties</param-name>
-		<param-value>/WEB-INF/property/initProperty.properties</param-value>
-	</init-param>
-	<init-param>
-		<param-name>cmd</param-name>
-		<param-value>select</param-value>
+		<param-name>commandProperties</param-name>
+		<param-value>/WEB-INF/property/commandProperties.properties</param-value>
 	</init-param>
 	<load-on-startup>1</load-on-startup>
 </servlet>

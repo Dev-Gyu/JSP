@@ -25,6 +25,29 @@ public class DAOClass {
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
 	
+	public void primaryKeyReset(Connection conn) throws SQLException, IOException{
+		int issuccess = 0;
+		String sql1 = "ALTER TABLE guestbook AUTO_INCREMENT=1";
+		String sql2 = "SET @COUNT = 0";
+		String sql3 = "UPDATE guestbook SET GUEST_ID = @COUNT:=@COUNT+1";
+		try {
+			conn.setAutoCommit(false);
+			pstmt = conn.prepareStatement(sql1);
+			issuccess = pstmt.executeUpdate();
+			pstmt = conn.prepareStatement(sql2);
+			issuccess = pstmt.executeUpdate();
+			pstmt = conn.prepareStatement(sql3);
+			issuccess = pstmt.executeUpdate();
+			if(issuccess!=0) {
+				conn.commit();
+			}else {
+				conn.rollback();
+			}
+		}finally {
+			CloseClass.close(pstmt);
+		}
+	}
+	
 	public int updateRecordDAO(Connection conn, VOClass vo) throws SQLException, IOException{
 		String sql = "UPDATE guestbook SET MESSAGE=? WHERE GUEST_ID = ?";
 		int isSuccess = 0;
