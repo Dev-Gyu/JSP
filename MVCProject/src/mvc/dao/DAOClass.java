@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.List;
 
 import mvc.close.CloseClass;
+import mvc.extract.ExtractResultSet;
+import mvc.loginvo.LoginVO;
 import mvc.vo.VOClass;
 
 public class DAOClass {
@@ -22,8 +24,30 @@ public class DAOClass {
 	
 	private DAOClass() {};
 	
+	private ExtractResultSet extract = new ExtractResultSet();
+	
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
+	
+	public LoginVO getMemberInfoDAO(Connection conn, String memberid) throws SQLException, IOException{
+		String sql = "SELECT * FROM member WHERE MEMBER_ID = ?";
+		LoginVO loginVo = new LoginVO();
+		try {
+		pstmt = conn.prepareStatement(sql);
+		pstmt.setString(1, memberid);
+		rs = pstmt.executeQuery();
+		if(rs.next()) {
+		loginVo = extract.extractLoginVOClass(rs);
+		}else {
+			loginVo.setNull();
+		}
+		return loginVo;
+		
+		}finally {
+			CloseClass.close(rs);
+			CloseClass.close(pstmt);
+		}
+	}
 	
 	public void primaryKeyReset(Connection conn) throws SQLException, IOException{
 		int issuccess = 0;
@@ -110,7 +134,7 @@ public class DAOClass {
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
 				do {
-				ls.add(extractResultSet(rs));
+				ls.add(extract.extractVOClass(rs));
 				}while(rs.next());
 				return ls;
 			}else {
@@ -131,7 +155,7 @@ public class DAOClass {
 		pstmt.setInt(1, guestid);
 		rs = pstmt.executeQuery();
 		if(rs.next()) {
-		vo = extractResultSet(rs);
+		vo = extract.extractVOClass(rs);
 		}else {
 			vo.setNull();
 		}
@@ -141,15 +165,6 @@ public class DAOClass {
 			CloseClass.close(rs);
 			CloseClass.close(pstmt);
 		}
-	}
-	
-	private VOClass extractResultSet(ResultSet rs) throws SQLException, IOException {
-		VOClass vo = new VOClass();
-		vo.setId(rs.getInt("guest_id"));
-		vo.setPassword(rs.getString("password"));
-		vo.setName(rs.getString("guest_name"));
-		vo.setMessage(rs.getString("message"));
-		return vo;
 	}
 
 }

@@ -5,7 +5,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 	request.setCharacterEncoding("UTF-8");
-	int guestid = Integer.parseInt(request.getParameter("guestid"));
+	int guestid = Integer.parseInt((String)session.getAttribute("guestid"));
 	String password = request.getParameter("password");
 	String message = request.getParameter("message");
 	
