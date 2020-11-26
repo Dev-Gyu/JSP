@@ -6,18 +6,18 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
 	request.setCharacterEncoding("UTF-8");
-	int guestid = Integer.parseInt(request.getParameter("guestid"));
+	int guestid = Integer.parseInt((String)session.getAttribute("guestid"));
 	String password = request.getParameter("password");
-	boolean isPasswordMatch = false;
+	String isLoginOkay = (String)session.getAttribute("isLoginOkay");
 	int isSuccess = 0;
 	
 	deleteRecordService delete = deleteRecordService.getInstance();
 	getRecordService get = getRecordService.getInstance();
 	VOClass vo = get.getOneRecord(guestid);
-	
-	if(password.equals(vo.getPassword())){
-	isSuccess = delete.deleteRecord(guestid);
+	if(isLoginOkay.equals("yes")){
+		isSuccess = delete.deleteRecord(vo.getId());
 	}
+	
 %>
 <!DOCTYPE html>
 <html>
@@ -26,16 +26,16 @@
 <title>삭제 결과</title>
 </head>
 <body>
-<c:if test="<%=isSuccess != 0%>">
+<c:if test='<%=isSuccess != 0%>'>
 <script>
-	alert('삭제 성공!')
+	alert('삭제 성공!');
 	location.href = "view.jsp";
 </script>
 </c:if>
 
-<c:if test="<%=isSuccess == 0 %>">
+<c:if test='<%=isSuccess == 0%>'>
 <script>
-	alert('비밀번호가 틀렸습니다.');
+	alert('삭제동작중 에러가 발생하였습니다.');
 	history.go(-1);
 </script>
 </c:if>

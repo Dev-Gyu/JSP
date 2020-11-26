@@ -12,6 +12,7 @@ import java.util.List;
 import mvc.close.CloseClass;
 import mvc.extract.ExtractResultSet;
 import mvc.loginvo.LoginVO;
+import mvc.vo.BoardVO;
 import mvc.vo.VOClass;
 
 public class DAOClass {
@@ -28,6 +29,44 @@ public class DAOClass {
 	
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
+	
+	public List<BoardVO> getAllBoardNameDAO(Connection conn) throws SQLException, IOException{
+		List<BoardVO> ls = new ArrayList<>();
+		String sql = "SELECT TABLE_NAME FROM INFOMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ?";
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, "study");
+			rs = pstmt.executeQuery();
+			if(rs.next()) {
+				do {
+					ls.add(extract.extractBoardVO(rs));
+				}while(rs.next());
+				return ls;
+			}else {
+				return Collections.emptyList();
+			}
+		}finally {
+			CloseClass.close(rs);
+			CloseClass.close(pstmt);
+		}
+	}
+	
+	public int createBoardDAO(Connection conn, BoardVO vo) throws SQLException, IOException{
+		int isSuccess = 0;
+		String sql = "CREATE TABLE " + vo.getBoardName() + "("
+				+ "GUEST_ID INT PRIMARY KEY AUTO_INCREMENT NOT NULL, "
+				+ "PASSWORD VARCHAR(20) NOT NULL, "
+						+ "GUEST_NAME " + vo.getNameType() + " NOT NULL, "
+								+ "MESSAGE TEXT NOT NULL)engine innoDB default character set utf8";
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			isSuccess = pstmt.executeUpdate();
+			return isSuccess;
+		}finally {
+			CloseClass.close(pstmt);
+		}
+	}
 	
 	public LoginVO getMemberInfoDAO(Connection conn, String memberid) throws SQLException, IOException{
 		String sql = "SELECT * FROM member WHERE MEMBER_ID = ?";

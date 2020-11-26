@@ -30,7 +30,11 @@ public class FilterClass implements Filter {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
 		HttpSession session = req.getSession();
-		String isLoginOkay = (String)req.getAttribute("isLoginOkay");
+		String isLoginOkay = (String)session.getAttribute("isLoginOkay");
+		System.out.println(isLoginOkay);
+		System.out.println(session.getAttribute("cmd"));
+		System.out.println(session.getAttribute("guestid"));
+		
 		if(isLoginOkay == null) {
 			res.sendRedirect("loginform.jsp");
 			return;
@@ -38,7 +42,7 @@ public class FilterClass implements Filter {
 		
 		LoginService loginService = LoginService.getInstance();
 		try {
-			LoginVO loginVO = loginService.getMemberInfo(request.getParameter("memberid"));
+			LoginVO loginVO = loginService.getMemberInfo((String)session.getAttribute("memberid"));
 			String memberid = loginVO.getMemberId();
 			String memberpw = loginVO.getMemberPw();
 			String inputid = request.getParameter("inputid");
@@ -54,6 +58,7 @@ public class FilterClass implements Filter {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		chain.doFilter(request, response);
 		
 	}
 	

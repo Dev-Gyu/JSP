@@ -1,5 +1,31 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+	request.setCharacterEncoding("UTF-8");
+	if(request.getParameter("cmd") == null){
+		session.setAttribute("cmd", "login");
+	}else if(request.getParameter("cmd") != null){
+		
+	String cmd = request.getParameter("cmd");
+	session.setAttribute("cmd", cmd);
+	session.setAttribute("guestid", request.getParameter("guestid"));
+	if((String)session.getAttribute("isLoginOkay") == "yes"){
+		if(cmd.equals("update")){
+		response.sendRedirect("updateform.jsp");
+		return;
+		}else if(cmd.equals("delete")){
+			response.sendRedirect("delete.jsp");
+			return;
+		}else if(cmd.equals("insert")){
+			response.sendRedirect("insertform.jsp");
+			return;
+		}else{
+			response.sendRedirect("login.jsp");
+			return;
+		}
+	}
+	}
+%>
 <!DOCTYPE html>
 <html>
 <head>

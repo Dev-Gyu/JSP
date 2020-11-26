@@ -5,9 +5,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import mvc.loginvo.LoginVO;
+import mvc.vo.BoardVO;
 import mvc.vo.VOClass;
 
 public class ExtractResultSet {
+	
+	public BoardVO extractBoardVO(ResultSet rs) throws SQLException, IOException{
+		BoardVO vo = new BoardVO();
+		vo.setBoardName(rs.getString("table_name"));
+		vo.setNameType(null);
+		return vo;
+	}
 	public VOClass extractVOClass(ResultSet rs) throws SQLException, IOException {
 		VOClass vo = new VOClass();
 		vo.setId(rs.getInt("guest_id"));

@@ -32,7 +32,7 @@
 <input type="hidden" name="name" value="<%=vo.getName() %>">
 	<table border="1" width="40%">
 		<tr><td width="10%">메시지</td><td><textarea name="message" cols="30" rows="3"><%= vo.getMessage() %></textarea></td></tr>
-		<tr><td colspan="2"><input type="submit" value="수정"><input type="reset" value="취소"></td></tr>
+		<tr><td colspan="2"><input type="submit" value="수정"><input type="button" onclick="location.href='view.jsp'" value="취소"></td></tr>
 	</table>
 </form>
 </c:if>
