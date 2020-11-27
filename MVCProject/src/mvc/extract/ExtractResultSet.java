@@ -12,7 +12,7 @@ public class ExtractResultSet {
 	
 	public BoardVO extractBoardVO(ResultSet rs) throws SQLException, IOException{
 		BoardVO vo = new BoardVO();
-		vo.setBoardName(rs.getString("table_name"));
+		vo.setBoardName(rs.getString("tables_in_study"));
 		vo.setNameType(null);
 		return vo;
 	}

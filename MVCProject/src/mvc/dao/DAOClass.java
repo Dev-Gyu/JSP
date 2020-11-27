@@ -32,10 +32,12 @@ public class DAOClass {
 	
 	public List<BoardVO> getAllBoardNameDAO(Connection conn) throws SQLException, IOException{
 		List<BoardVO> ls = new ArrayList<>();
-		String sql = "SELECT TABLE_NAME FROM INFOMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = ?";
+		String sql1 = "USE study";
+		String sql2 = "show tables";
 		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, "study");
+			pstmt = conn.prepareStatement(sql1);
+			pstmt.executeUpdate();
+			pstmt = conn.prepareStatement(sql2);
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
 				do {
