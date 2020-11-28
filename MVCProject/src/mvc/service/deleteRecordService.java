@@ -20,12 +20,12 @@ public class deleteRecordService {
 	
 	private DAOClass dao = DAOClass.getInstance();
 	
-	public int deleteRecord(int guestid) throws SQLException, IOException{
+	public int deleteRecord(int guestid, String boardName) throws SQLException, IOException{
 		Connection conn = null;
 		int isSuccess = 0;
 		try {
 			conn = ConnectionClass.getConnection();
-			isSuccess = dao.deleteRecordDAO(conn, guestid);
+			isSuccess = dao.deleteRecordDAO(conn, guestid, boardName);
 			System.out.println(isSuccess);
 			if(isSuccess != 0) {
 				return isSuccess;

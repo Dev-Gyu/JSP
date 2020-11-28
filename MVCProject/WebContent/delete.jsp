@@ -9,13 +9,14 @@
 	int guestid = Integer.parseInt((String)session.getAttribute("guestid"));
 	String password = request.getParameter("password");
 	String isLoginOkay = (String)session.getAttribute("isLoginOkay");
+	String boardName = (String)session.getAttribute("nowBoardName");
 	int isSuccess = 0;
 	
 	deleteRecordService delete = deleteRecordService.getInstance();
 	getRecordService get = getRecordService.getInstance();
-	VOClass vo = get.getOneRecord(guestid);
+	VOClass vo = get.getOneRecord(guestid, boardName);
 	if(isLoginOkay.equals("yes")){
-		isSuccess = delete.deleteRecord(vo.getId());
+		isSuccess = delete.deleteRecord(vo.getId(), boardName);
 	}
 	
 %>

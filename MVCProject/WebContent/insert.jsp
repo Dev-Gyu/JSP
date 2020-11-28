@@ -8,11 +8,13 @@
 	VOClass vo = new VOClass();
 	insertRecordService insert = insertRecordService.getInstance();
 	int isSuccess = 0;
+	String boardName = (String)session.getAttribute("nowBoardName");
 	
 	vo.setPassword(request.getParameter("password"));
 	vo.setName(request.getParameter("name"));
 	vo.setMessage(request.getParameter("message"));
-	isSuccess = insert.insertRecord(vo, isSuccess);
+	isSuccess = insert.insertRecord(vo, isSuccess, boardName);
+	String link = "view.jsp?board="+boardName;
 %>
 
 <!DOCTYPE html>
@@ -31,12 +33,10 @@
 
 <c:if test="<%= isSuccess == 0 %>">
 <script>
-	alert('메시지 입력에 성공하였습니다.');
+	alert('메시지 입력에 실패하였습니다.');
 	window.location.href='view.jsp';
 </script>
 </c:if>
-
-<button type="button" onclick="location.href='view.jsp'">목록 페이지로</button>
 
 
 </body>

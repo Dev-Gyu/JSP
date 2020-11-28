@@ -8,10 +8,11 @@
 	int guestid = Integer.parseInt((String)session.getAttribute("guestid"));
 	String password = request.getParameter("password");
 	int isPasswordMatch = 0;
+	String nowBoardName = (String)session.getAttribute("nowBoardName");
 	
 	getRecordService get = getRecordService.getInstance();
 	
-	VOClass vo = get.getOneRecord(guestid);
+	VOClass vo = get.getOneRecord(guestid, nowBoardName);
 	if(session.getAttribute("isLoginOkay").equals("yes")){
 		isPasswordMatch = 1;
 	}
@@ -38,7 +39,7 @@
 </c:if>
 <c:if test="<%=isPasswordMatch != 1 %>">
 <script>
-	alert('비밀번호가 틀렸습니다');
+	alert('로그인 실패!');
 	history.go(-1);
 </script>
 </c:if>

@@ -30,6 +30,24 @@ public class DAOClass {
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
 	
+	public int deleteBoardDAO(Connection conn, String BoardName) throws SQLException, IOException{
+		String sql = "DROP TABLE " + BoardName;
+		int isSuccess = 0;
+		try {
+			conn.setAutoCommit(false);
+			pstmt = conn.prepareStatement(sql);
+			isSuccess = pstmt.executeUpdate();
+			if(isSuccess != 0) {
+				conn.commit();
+			}else {
+				conn.rollback();
+			}
+			return isSuccess;
+		}finally {
+			CloseClass.close(pstmt);
+		}
+	}
+	
 	public List<BoardVO> getAllBoardNameDAO(Connection conn) throws SQLException, IOException{
 		List<BoardVO> ls = new ArrayList<>();
 		String sql1 = "USE study";
@@ -90,11 +108,11 @@ public class DAOClass {
 		}
 	}
 	
-	public void primaryKeyReset(Connection conn) throws SQLException, IOException{
+	public void primaryKeyReset(Connection conn, String nowBoardName) throws SQLException, IOException{
 		int issuccess = 0;
-		String sql1 = "ALTER TABLE guestbook AUTO_INCREMENT=1";
+		String sql1 = "ALTER TABLE "+ nowBoardName +" AUTO_INCREMENT=1";
 		String sql2 = "SET @COUNT = 0";
-		String sql3 = "UPDATE guestbook SET GUEST_ID = @COUNT:=@COUNT+1";
+		String sql3 = "UPDATE "+ nowBoardName +" SET GUEST_ID = @COUNT:=@COUNT+1";
 		try {
 			conn.setAutoCommit(false);
 			pstmt = conn.prepareStatement(sql1);
@@ -134,8 +152,8 @@ public class DAOClass {
 		}
 	}
 	
-	public int deleteRecordDAO(Connection conn, int guestid) throws SQLException, IOException{
-		String sql = "DELETE FROM guestbook WHERE GUEST_ID = ?";
+	public int deleteRecordDAO(Connection conn, int guestid, String boardName) throws SQLException, IOException{
+		String sql = "DELETE FROM "+ boardName +" WHERE GUEST_ID = ?";
 		int isSuccess = 0;
 		try {
 			conn.setAutoCommit(false);
@@ -154,8 +172,8 @@ public class DAOClass {
 			}
 	}
 	
-	public int insertRecordDAO(Connection conn, VOClass vo) throws SQLException, IOException{
-		String sql = "INSERT INTO guestbook (PASSWORD, GUEST_NAME, MESSAGE) VALUES (?, ?, ?)";
+	public int insertRecordDAO(Connection conn, VOClass vo, String boardName) throws SQLException, IOException{
+		String sql = "INSERT INTO "+ boardName +" (PASSWORD, GUEST_NAME, MESSAGE) VALUES (?, ?, ?)";
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, vo.getPassword());
@@ -167,8 +185,8 @@ public class DAOClass {
 		}
 	}
 	
-	public List<VOClass> getAllRecordsDAO(Connection conn) throws SQLException, IOException {
-		String sql = "SELECT * FROM guestbook";
+	public List<VOClass> getAllRecordsDAO(Connection conn, String nowBoardName) throws SQLException, IOException {
+		String sql = "SELECT * FROM " + nowBoardName;
 		List<VOClass> ls = new ArrayList<VOClass>();
 		try {
 			pstmt = conn.prepareStatement(sql);
@@ -188,8 +206,8 @@ public class DAOClass {
 		}	
 	}
 	
-	public VOClass getOneRecordDAO(Connection conn, int guestid) throws SQLException, IOException{
-		String sql = "SELECT * FROM guestbook WHERE GUEST_ID = ?";
+	public VOClass getOneRecordDAO(Connection conn, int guestid, String nowBoardName) throws SQLException, IOException{
+		String sql = "SELECT * FROM " + nowBoardName + " WHERE GUEST_ID = ?";
 		VOClass vo = new VOClass();
 		try {
 		pstmt = conn.prepareStatement(sql);

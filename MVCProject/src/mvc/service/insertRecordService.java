@@ -21,11 +21,11 @@ public class insertRecordService {
 	
 	private DAOClass dao = DAOClass.getInstance();
 	
-	public int insertRecord(VOClass vo, int isSuccess) throws SQLException, IOException{
+	public int insertRecord(VOClass vo, int isSuccess, String boardName) throws SQLException, IOException{
 		Connection conn = null;
 		try {
 			conn = ConnectionClass.getConnection();
-			isSuccess = dao.insertRecordDAO(conn, vo);
+			isSuccess = dao.insertRecordDAO(conn, vo, boardName);
 			return isSuccess;
 			}finally {
 				CloseClass.close(conn);

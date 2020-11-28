@@ -8,10 +8,11 @@
 	int guestid = Integer.parseInt((String)session.getAttribute("guestid"));
 	String password = request.getParameter("password");
 	String message = request.getParameter("message");
+	String nowBoardName = (String)session.getAttribute("nowBoardName");
 	
 	getRecordService get = getRecordService.getInstance();
 	updateRecordService update = updateRecordService.getInstance();
-	VOClass vo = get.getOneRecord(guestid);
+	VOClass vo = get.getOneRecord(guestid, nowBoardName);
 	
 		vo.setMessage(message);
 		update.updateRecord(vo);
